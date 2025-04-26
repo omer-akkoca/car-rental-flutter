@@ -45,3 +45,4 @@ app.*.map.json
 
 # custom ignores
 /lib/firebase_options.dart
+/android/google-services.json
