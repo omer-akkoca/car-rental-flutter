@@ -1,6 +1,7 @@
 import 'package:car_rental/components/svg_asset.dart';
 import 'package:car_rental/constants/images.dart';
 import 'package:car_rental/models/car.dart';
+import 'package:car_rental/pages/car_details.dart';
 import 'package:flutter/material.dart';
 
 class CarCard extends StatelessWidget {
@@ -10,6 +11,14 @@ class CarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CarDetailsPage(car: car),
+          ),
+        );
+      },
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
