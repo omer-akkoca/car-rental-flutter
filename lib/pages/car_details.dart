@@ -1,5 +1,6 @@
 import 'package:car_rental/constants/images.dart';
 import 'package:car_rental/models/car.dart';
+import 'package:car_rental/pages/maps_details_page.dart';
 import 'package:car_rental/widgets/car_card.dart';
 import 'package:car_rental/widgets/more_card.dart';
 import 'package:flutter/material.dart';
@@ -56,17 +57,27 @@ class CarDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Container(
-                    height: 175,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: AssetImage(CImages.mapsImage),
-                        fit: BoxFit.cover,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapsDetailsPage(car: car),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 175,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                          image: AssetImage(CImages.mapsImage),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 5)
+                        ],
                       ),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 5)
-                      ],
                     ),
                   ),
                 ),

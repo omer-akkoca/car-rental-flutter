@@ -5,4 +5,5 @@ class CImages{
   static const pumpIcon = "assets/images/pump.svg";
   static const userAvatarImage = "assets/images/user.png";
   static const mapsImage = "assets/images/maps.png";
+  static const whiteCar = "assets/images/white_car.png";
 }
