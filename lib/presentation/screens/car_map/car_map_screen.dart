@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-class MapsDetailsPage extends StatelessWidget {
+class CarMapScreen extends StatelessWidget {
   final Car car;
-  const MapsDetailsPage({super.key, required this.car});
+  const CarMapScreen({super.key, required this.car});
 
   @override
   Widget build(BuildContext context) {

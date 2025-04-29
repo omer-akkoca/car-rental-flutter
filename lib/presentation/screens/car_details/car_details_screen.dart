@@ -1,6 +1,6 @@
 import 'package:car_rental/constants/images.dart';
 import 'package:car_rental/data/models/car.dart';
-import 'package:car_rental/pages/maps_details_page.dart';
+import 'package:car_rental/presentation/screens/car_map/car_map_screen.dart';
 import 'package:car_rental/presentation/widgets/car_card.dart';
 import 'package:car_rental/presentation/widgets/more_card.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +94,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> with SingleTickerPr
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MapsDetailsPage(car: widget.car),
+                          builder: (context) => CarMapScreen(car: widget.car),
                         ),
                       );
                     },
