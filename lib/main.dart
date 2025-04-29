@@ -1,23 +1,22 @@
-import 'package:car_rental/pages/car_details.dart';
-import 'package:car_rental/pages/onboarding_page.dart';
+import 'package:car_rental/injection.dart';
+import 'package:car_rental/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:car_rental/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:car_rental/firebase_options.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeFirebase();
-  runApp(const MyApp());
-}
 
-Future<void> initializeFirebase() async {
-  try {
-    if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp();
-    }
-  } catch (e) {
-    print('Firebase initialization error: $e');
-  }
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => carListViewModel),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +30,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const OnboardingPage(),
+      home: const OnboardingScreen(),
     );
+  }
+}
+
+Future<void> initializeFirebase() async {
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+        name: "rent-car-flutter",
+      );
+    }
+  } catch (e) {
+    debugPrint('FIREBASE ERROR: $e');
   }
 }
