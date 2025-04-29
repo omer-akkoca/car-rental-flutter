@@ -1,9 +1,9 @@
 import 'package:car_rental/constants/images.dart';
-import 'package:car_rental/pages/car_list_page.dart';
+import 'package:car_rental/presentation/screens/car_list/car_list_screen.dart';
 import 'package:flutter/material.dart';
 
-class OnboardingPage extends StatelessWidget {
-  const OnboardingPage({super.key});
+class OnboardingScreen extends StatelessWidget {
+  const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +51,12 @@ class OnboardingPage extends StatelessWidget {
                     height: 54,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
+                        Navigator.pushAndRemoveUntil(
+                          context,
                           MaterialPageRoute(
-                            builder: (context) => CarListPage(),
+                            builder: (context) {
+                              return const CarListScreen();
+                            },
                           ),
                           (route) => false,
                         );
@@ -65,7 +68,9 @@ class OnboardingPage extends StatelessWidget {
                       child: const Text(
                         "Let's Go",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   )

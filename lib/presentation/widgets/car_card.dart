@@ -1,23 +1,30 @@
-import 'package:car_rental/components/svg_asset.dart';
+import 'package:car_rental/presentation/widgets/svg_asset.dart';
 import 'package:car_rental/constants/images.dart';
-import 'package:car_rental/models/car.dart';
-import 'package:car_rental/pages/car_details.dart';
+import 'package:car_rental/data/models/car.dart';
+import 'package:car_rental/presentation/screens/car_details/car_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class CarCard extends StatelessWidget {
   final Car car;
-  const CarCard({super.key, required this.car});
+  final bool navigate;
+  const CarCard({
+    super.key,
+    required this.car,
+    this.navigate = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CarDetailsPage(car: car),
-          ),
-        );
+        if (navigate) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CarDetailsScreen(car: car),
+            ),
+          );
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -34,7 +41,7 @@ class CarCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.asset(CImages.carImage, height: 120),
+            Image.network(car.image, height: 120),
             Text(
               car.model,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

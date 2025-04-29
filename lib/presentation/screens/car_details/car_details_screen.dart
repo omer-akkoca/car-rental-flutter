@@ -1,20 +1,20 @@
 import 'package:car_rental/constants/images.dart';
-import 'package:car_rental/models/car.dart';
+import 'package:car_rental/data/models/car.dart';
 import 'package:car_rental/pages/maps_details_page.dart';
-import 'package:car_rental/widgets/car_card.dart';
-import 'package:car_rental/widgets/more_card.dart';
+import 'package:car_rental/presentation/widgets/car_card.dart';
+import 'package:car_rental/presentation/widgets/more_card.dart';
 import 'package:flutter/material.dart';
 
-class CarDetailsPage extends StatefulWidget {
+class CarDetailsScreen extends StatefulWidget {
   final Car car;
 
-  const CarDetailsPage({super.key, required this.car});
+  const CarDetailsScreen({super.key, required this.car});
 
   @override
-  State<CarDetailsPage> createState() => _CarDetailsPageState();
+  State<CarDetailsScreen> createState() => _CarDetailsScreenState();
 }
 
-class _CarDetailsPageState extends State<CarDetailsPage> with SingleTickerProviderStateMixin {
+class _CarDetailsScreenState extends State<CarDetailsScreen> with SingleTickerProviderStateMixin {
 
   AnimationController? _controller;
   Animation<double>? _animation;
@@ -27,18 +27,18 @@ class _CarDetailsPageState extends State<CarDetailsPage> with SingleTickerProvid
     );
 
     _animation = Tween<double>(begin: 1.0, end: 1.5).animate(_controller!)
-    ..addListener(() {
-     setState(() {});
-    });
+      ..addListener(() {
+        setState(() {});
+      });
 
     _controller!.forward();
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    _controller!.forward();
-    super.didChangeDependencies();
+  void dispose() {
+    _controller!.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,7 +59,7 @@ class _CarDetailsPageState extends State<CarDetailsPage> with SingleTickerProvid
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: CarCard(car: widget.car),
+            child: CarCard(car: widget.car, navigate: false),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
