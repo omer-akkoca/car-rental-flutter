@@ -14,7 +14,7 @@ class CarMapScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xff2c2b34),
         title: Text(
-          "Location of ${car.model}",
+          car.model,
           style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -152,9 +152,14 @@ Widget carDetailsCard(Car car) {
           ),
         ),
         Positioned(
-          top: 45,
-          right: 10,
-          child: Image.asset(CImages.whiteCar),
+          top: 30,
+          right: 5,
+          child: Image.network(
+            car.image,
+            width: 200,
+            height: 125,
+            fit: BoxFit.contain,
+          ),
         )
       ],
     ),
