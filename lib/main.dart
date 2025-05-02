@@ -3,16 +3,23 @@ import 'package:car_rental/presentation/screens/onboarding/onboarding_screen.dar
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:car_rental/firebase_options.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
   await initializeFirebase();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => carListViewModel),
+        ChangeNotifierProvider(create: (_) => carDetailsViewModel)
       ],
       child: const MyApp(),
     ),
@@ -26,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Car Rental',
       theme: ThemeData(
         useMaterial3: true,
       ),

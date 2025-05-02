@@ -1,5 +1,8 @@
+import 'package:car_rental/constants/colors.dart';
 import 'package:car_rental/presentation/screens/car_list/car_list_viewmodel.dart';
 import 'package:car_rental/presentation/widgets/car_card.dart';
+import 'package:car_rental/presentation/widgets/custom_app_bar.dart';
+import 'package:car_rental/presentation/widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,33 +16,21 @@ class CarListScreen extends StatelessWidget {
     return FutureBuilder(
       future: viewModel.fetchCars(),
       builder: (context, snapshot) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: _buildAppBar(),
+        return CScaffold(
+          appBar: const CAppbar(
+            title: "Choose Your Car",
+            showBackIcon: false,
+          ),
           body: _buildBody(snapshot.connectionState),
         );
       },
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: const Text(
-        'Cars',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: const Color(0xff2c2b34),
-    );
-  }
-
   Widget _buildBody(ConnectionState state) {
     if (state == ConnectionState.waiting) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: CColors.gunmetal),
       );
     }
     return Consumer<CarListViewModel>(

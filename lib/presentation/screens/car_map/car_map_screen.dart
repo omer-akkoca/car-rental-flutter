@@ -1,5 +1,8 @@
-import 'package:car_rental/constants/images.dart';
+import 'package:car_rental/constants/colors.dart';
 import 'package:car_rental/data/models/car.dart';
+import 'package:car_rental/presentation/widgets/custom_app_bar.dart';
+import 'package:car_rental/presentation/widgets/custom_scaffold.dart';
+import 'package:car_rental/presentation/widgets/safe_area_bottom_space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,193 +13,213 @@ class CarMapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff2c2b34),
-        title: Text(
-          car.model,
-          style: const TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
-      ),
-      body: Stack(
+    return CScaffold(
+      appBar: CAppbar(title: car.model),
+      body: Column(
         children: [
-          FlutterMap(
-            options: const MapOptions(
-              initialCenter: LatLng(41.00244, 29.23187),
-              initialZoom: 10,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: const ["a", "b", "c"],
-              )
-            ],
+          Expanded(
+            child: _buildMap(),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: carDetailsCard(car),
-          ),
+          _buildCarDetails(),
         ],
       ),
     );
   }
-}
 
-Widget carDetailsCard(Car car) {
-  return SizedBox(
-    height: 350,
-    child: Stack(
+  Widget _buildMap() {
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: LatLng(car.location.longitude, car.location.latitude),
+        initialZoom: 12,
+      ),
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            //color: Colors.black54,
-            color: Color(0xff2c2b34),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
+        TileLayer(
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              width: 50.0,
+              height: 50.0,
+              point: LatLng(car.location.longitude, car.location.latitude),
+              child: const Icon(Icons.location_on, color: Colors.red, size: 35),
             ),
-            boxShadow: [
-              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10)
-            ],
-          ),
-          child: Column(
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCarDetails() {
+    return Container(
+      color: CColors.gunmetal,
+      child: Stack(
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              Text(
-                car.model,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildCarTitle(),
+                    const SizedBox(height: 8),
+                    _buildCarInformation(),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.directions_car,
-                    color: Colors.white,
-                    size: 16,
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(20),
                   ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "${car.distance} km",
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                  const SizedBox(width: 10),
-                  const Icon(Icons.battery_full, color: Colors.white, size: 16),
-                  const SizedBox(width: 5),
-                  Text(
-                    "${car.fuelCapacity}",
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                ],
-              )
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFeatureTitle(),
+                    const SizedBox(height: 8),
+                    _buildFeatureIcons(),
+                    const SizedBox(height: 16),
+                    _buildPriceAndButton(),
+                    const SafeAreaBottomSpace(),
+                  ],
+                ),
+              ),
             ],
           ),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20),
-              ),
+          Positioned(
+            top: 30,
+            right: 5,
+            child: Image.network(
+              car.image,
+              width: 200,
+              height: 125,
+              fit: BoxFit.contain,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Features",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                featureIcons(),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "\$${car.pricePerHour}/day",
-                      style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                      ),
-                      child: const Text(
-                        "Book Now",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 30,
-          right: 5,
-          child: Image.network(
-            car.image,
-            width: 200,
-            height: 125,
-            fit: BoxFit.contain,
-          ),
-        )
-      ],
-    ),
-  );
-}
+          )
+        ],
+      ),
+    );
+  }
 
-Widget featureIcons() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      featureIcon(Icons.local_gas_station, "Diesel", "Common Rail"),
-      featureIcon(Icons.speed, "Acceleration", "0 - 100km/s"),
-      featureIcon(Icons.ac_unit, "Cold", "Temp Control"),
-    ],
-  );
-}
+  Widget _buildCarTitle() {
+    return Text(
+      car.model,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
 
-Widget featureIcon(IconData icon, String title, String subTitle) {
-  return Container(
-    width: 100,
-    height: 100,
-    padding: const EdgeInsets.all(5),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: Colors.grey, width: 1),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _buildCarInformation() {
+    return Row(
       children: [
-        Icon(icon, size: 28),
-        Text(title),
+        const Icon(
+          Icons.directions_car,
+          color: Colors.white,
+          size: 16,
+        ),
+        const SizedBox(width: 5),
         Text(
-          subTitle,
-          style: const TextStyle(color: Colors.grey, fontSize: 10),
+          "${car.distance} km",
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        const SizedBox(width: 10),
+        const Icon(Icons.battery_full, color: Colors.white, size: 16),
+        const SizedBox(width: 5),
+        Text(
+          car.fuelCapacity.toString(),
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeatureTitle() {
+    return const Text(
+      "Features",
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget _buildFeatureIcons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildFeatureIcon(Icons.local_gas_station, "Diesel", "Common Rail"),
+        _buildFeatureIcon(Icons.speed, "Acceleration", "0 - 100km/s"),
+        _buildFeatureIcon(Icons.ac_unit, "Cold", "Temp Control"),
+      ],
+    );
+  }
+
+  Widget _buildFeatureIcon(IconData icon, String title, String subTitle) {
+    return Container(
+      width: 100,
+      height: 100,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 1),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, size: 28),
+          const SizedBox(height: 4),
+          Text(title),
+          const SizedBox(height: 4),
+          Text(
+            subTitle,
+            style: const TextStyle(color: Colors.grey, fontSize: 10),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPriceAndButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "\$${car.pricePerHour}/day",
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: CColors.gunmetal,
+            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+          ),
+          child: const Text(
+            "Book Now",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
         )
       ],
-    ),
-  );
+    );
+  }
 }

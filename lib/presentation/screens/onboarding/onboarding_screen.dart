@@ -1,3 +1,4 @@
+import 'package:car_rental/constants/colors.dart';
 import 'package:car_rental/constants/images.dart';
 import 'package:car_rental/presentation/screens/car_list/car_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff2c2b34),
+      backgroundColor: CColors.gunmetal,
       body: Column(
         children: [
           Expanded(
